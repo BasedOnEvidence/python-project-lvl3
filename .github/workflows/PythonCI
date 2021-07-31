@@ -1,0 +1,30 @@
+name: PythonCI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage: 
+    runs-on: ubuntu-latest
+    
+    steps:      
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.6.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6.8
+      - name: install poetry
+        run: pip install poetry
+      - name: install dependency
+        run: make install  
+      - name: lint
+        run: make lint
+      - name: code coverage
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: 1f96da9a87162b395bc4f5dc85a3188c48bc744d1fc7817a5454ef3ee8f1872e
+        with:
+          coverageCommand: make coverage
