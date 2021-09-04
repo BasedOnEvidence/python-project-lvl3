@@ -1,5 +1,4 @@
 import os
-import os.path
 
 from page_loader.page_loader import download, get_name_from_url
 
