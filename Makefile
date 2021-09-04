@@ -11,10 +11,10 @@ package-uninstall-0.1.0:
 	pip uninstall dist/hexlet_code-0.1.0-py3-none-any.whl
 
 lint:
-	poetry run flake8 page-loader
+	poetry run flake8 page_loader
 
 page-loader:
-	poetry run page-loader
+	poetry run page_loader
 
 tests:
 	poetry run pytest -vv -s
@@ -25,4 +25,4 @@ coverage:
 coverage-report:
 	coverage report
 
-.PHONY: page-loader page-loader tests
+.PHONY: page_loader page_loader tests
