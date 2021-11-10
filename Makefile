@@ -25,4 +25,4 @@ coverage:
 coverage-report:
 	coverage report
 
-.PHONY: page_loader page_loader test_page_loader
+.PHONY: page_loader page_loader test_page_loader tests

@@ -1,7 +1,17 @@
 import os
 import requests
 import re
+import errno
 from bs4 import BeautifulSoup
+
+
+def create_path_if_it_is_not_exists(path):
+    if not os.path.exists(os.path.dirname(path)):
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError as err:
+            if err.errno != errno.EEXIST:
+                raise
 
 
 def get_name_from_url(url):
@@ -17,17 +27,18 @@ def get_content_folder_name(file_name):
 
 
 def download_content(response, content_path, base_url):
-    # os.mkdir(content_path)
     soup = BeautifulSoup(response.text, 'html.parser')
     img_tags = soup.find_all('img')
     urls = [img['src'] for img in img_tags]
     for url in urls:
-        file_name = re.search(r'/([\w_-]+[.](jpg|gif|png))$', url)
+        file_name = re.search(r'/([\w_-]+[.](jpg|gif|png))$', url)[1]
         print(file_name)
         if not file_name:
             print("Regex didn't match with the url: {}".format(url))
             continue
-        with open(content_path + '/' + file_name, 'wb') as f:
+        content_file_path = content_path + '/' + file_name
+        create_path_if_it_is_not_exists(content_file_path)
+        with open(content_file_path, 'wb') as f:
             if 'http' not in url:
                 url = '{}{}'.format(base_url, url)
             response = requests.get(url)
