@@ -6,7 +6,8 @@ from page_loader.tools import (
     get_file_name_from_url,
     get_domain_from_url,
     is_url_in_domain,
-    convert_url_to_file_name
+    convert_url_to_file_name,
+    make_url_absolute
 )
 from page_loader.logger import get_logger
 from progress.bar import ChargingBar
@@ -32,6 +33,7 @@ def get_resources(txt_data):
 
 
 def download_resources(txt_data, output_path, content_path, base_url):
+    logger.info('Current base url: {}'.format(base_url))
     current_txt = txt_data
     domain = get_domain_from_url(base_url)
     urls = get_resources(txt_data)
@@ -42,11 +44,14 @@ def download_resources(txt_data, output_path, content_path, base_url):
     for tag in RESOURCES.keys():
         for url in urls[tag]:
             if is_url_in_domain(domain, url):
+                logger.info('Current content absolute url: {}'.format(url))
                 file_name = get_file_name_from_url(url)
                 content_file_path = content_path + '/' + file_name
                 current_txt = current_txt.replace(url, content_file_path)
                 create_directory(content_file_path)
                 with open(content_file_path, 'wb') as f:
+                    url = make_url_absolute(base_url, url)
+                    logger.info('Current content url: {}'.format(url))
                     response = requests.get(url)
                     f.write(response.content)
             bar.next()

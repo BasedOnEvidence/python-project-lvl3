@@ -22,6 +22,12 @@ def get_file_name_from_url(url):
     return os.path.basename(url)
 
 
+def make_url_absolute(base_url, url):
+    if 'http' not in url:
+        return base_url + url
+    return url
+
+
 def convert_url_to_file_name(url):
     result = re.split(r'//', url)[1]
     result = re.sub(r'\W', '-', result)
