@@ -9,6 +9,7 @@ from page_loader.tools import (
     convert_url_to_file_name
 )
 from page_loader.logger import get_logger
+from progress.bar import ChargingBar
 
 
 logger = get_logger(__name__)
@@ -34,6 +35,10 @@ def download_resources(txt_data, output_path, content_path, base_url):
     current_txt = txt_data
     domain = get_domain_from_url(base_url)
     urls = get_resources(txt_data)
+    logger.info('Urls: {}'.format(urls))
+    bar_max_length = sum([len(item) for item in urls.values()])
+    logger.info('Items count: {}'.format(bar_max_length))
+    bar = ChargingBar('Downloading resources:', max=bar_max_length)
     for tag in RESOURCES.keys():
         for url in urls[tag]:
             if is_url_in_domain(domain, url):
@@ -44,8 +49,10 @@ def download_resources(txt_data, output_path, content_path, base_url):
                 with open(content_file_path, 'wb') as f:
                     response = requests.get(url)
                     f.write(response.content)
+            bar.next()
     with open(output_path, 'w') as file_:
         file_.write(current_txt)
+    bar.finish()
 
 
 def download(output_path, url):
