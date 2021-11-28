@@ -57,6 +57,8 @@ def download_resources(txt_data, output_path, content_path, base_url):
 
 def download(url, output_path):
     response = requests.get(url, allow_redirects=True)
+    if response.status_code >= 400:
+        raise Exception('Status code = {}'.format(response.status_code))
     txt_data = response.text
     file_name = convert_url_to_file_name(url)
     content_folder_name = get_content_folder_name(file_name)
