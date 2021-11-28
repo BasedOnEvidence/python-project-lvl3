@@ -5,7 +5,7 @@ import os
 from page_loader.tools import (
     get_content_folder_name,
     get_file_name_from_url,
-    create_path_if_it_is_not_exists,
+    create_directory,
     convert_url_to_file_name,
     get_domain_from_url,
     is_url_in_domain
@@ -24,9 +24,9 @@ def test_get_content_folder_name():
     ) == '1_files'
 
 
-def test_create_path_if_it_is_not_exists():
+def test_create_directory():
     with tempfile.TemporaryDirectory() as tmpdirname:
-        create_path_if_it_is_not_exists(tmpdirname + '/sdfs/dfs/dssd.jnf')
+        create_directory(tmpdirname + '/sdfs/dfs/dssd.jnf')
         assert os.path.exists(tmpdirname + '/sdfs')
         assert os.path.exists(tmpdirname + '/sdfs/dfs')
         assert not os.path.isfile(tmpdirname + '/sdfs/dfs/dssd.jnf')

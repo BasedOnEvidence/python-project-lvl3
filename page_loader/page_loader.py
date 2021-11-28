@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from page_loader.tools import (
-    create_path_if_it_is_not_exists,
+    create_directory,
     get_content_folder_name,
     get_file_name_from_url,
     get_domain_from_url,
@@ -20,7 +20,7 @@ RESOURCES = {
 }
 
 
-def find_content(txt_data) -> dict[str, list]:
+def get_resources(txt_data):
     soup = BeautifulSoup(txt_data, 'html.parser')
     data = {}
     for tag in RESOURCES.keys():
@@ -30,20 +30,18 @@ def find_content(txt_data) -> dict[str, list]:
     return data
 
 
-def download_content(txt_data, output_path, content_path, base_url):
+def download_resources(txt_data, output_path, content_path, base_url):
     current_txt = txt_data
     domain = get_domain_from_url(base_url)
-    urls = find_content(txt_data)
+    urls = get_resources(txt_data)
     for tag in RESOURCES.keys():
         for url in urls[tag]:
             if is_url_in_domain(domain, url):
                 file_name = get_file_name_from_url(url)
                 content_file_path = content_path + '/' + file_name
                 current_txt = current_txt.replace(url, content_file_path)
-                create_path_if_it_is_not_exists(content_file_path)
+                create_directory(content_file_path)
                 with open(content_file_path, 'wb') as f:
-                    if 'http' not in url:
-                        url = '{}{}'.format(base_url, url)
                     response = requests.get(url)
                     f.write(response.content)
     with open(output_path, 'w') as file_:
@@ -59,5 +57,5 @@ def download(output_path, url):
     logger.info('Content path: {}'.format(content_path))
     output_path += '/' + file_name
     logger.info('Output path: {}'.format(output_path))
-    download_content(txt_data, output_path, content_path, url)
+    download_resources(txt_data, output_path, content_path, url)
     return output_path

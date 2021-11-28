@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 import re
 
 
-def create_path_if_it_is_not_exists(path):
+def create_directory(path):
     if not os.path.exists(os.path.dirname(path)):
         try:
             os.makedirs(os.path.dirname(path))
