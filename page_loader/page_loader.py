@@ -20,7 +20,8 @@ RESOURCES = {
 }
 
 
-def find_content(soup: BeautifulSoup) -> dict[str, list]:
+def find_content(txt_data) -> dict[str, list]:
+    soup = BeautifulSoup(txt_data, 'html.parser')
     data = {}
     for tag in RESOURCES.keys():
         tags = soup.find_all(tag, {RESOURCES[tag]: True})
@@ -32,7 +33,7 @@ def find_content(soup: BeautifulSoup) -> dict[str, list]:
 def download_content(txt_data, output_path, content_path, base_url):
     current_txt = txt_data
     domain = get_domain_from_url(base_url)
-    urls = find_content(BeautifulSoup(txt_data, 'html.parser'))
+    urls = find_content(txt_data)
     for tag in RESOURCES.keys():
         for url in urls[tag]:
             if is_url_in_domain(domain, url):

@@ -5,9 +5,7 @@ import os
 
 from tests.fake_response import FakeResponse
 
-from page_loader.page_loader import (
-    download
-)
+from page_loader.page_loader import download
 
 
 def read_file(path, mode):
