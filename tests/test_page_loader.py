@@ -6,26 +6,13 @@ import os
 from tests.fake_response import FakeResponse
 
 from page_loader.page_loader import (
-    download,
-    convert_url_to_file_name
+    download
 )
 
 
 def read_file(path, mode):
     with open(path, mode) as f:
         return f.read()
-
-
-def test_get_name_from_url():
-    assert convert_url_to_file_name(
-        'https://ru.hexlet.io/courses'
-    ) == 'ru-hexlet-io-courses.html'
-    assert convert_url_to_file_name(
-        'ftp://ru.hexlet.io/courses'
-    ) == 'ru-hexlet-io-courses.html'
-    assert convert_url_to_file_name(
-        'ftp://'
-    ) == '.html'
 
 
 def test_download():
