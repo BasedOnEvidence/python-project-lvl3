@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from page_loader.os_tools import (
+from page_loader.tools import (
     create_path_if_it_is_not_exists,
     get_content_folder_name,
     get_file_name_from_url
