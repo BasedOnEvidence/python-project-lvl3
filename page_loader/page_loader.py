@@ -55,7 +55,7 @@ def download_resources(txt_data, output_path, content_path, base_url):
     bar.finish()
 
 
-def download(output_path, url):
+def download(url, output_path):
     response = requests.get(url, allow_redirects=True)
     txt_data = response.text
     file_name = convert_url_to_file_name(url)

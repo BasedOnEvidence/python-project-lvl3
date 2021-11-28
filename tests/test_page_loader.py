@@ -33,7 +33,7 @@ def test_download():
         mock_request.side_effect = mock_side_effect
         with tempfile.TemporaryDirectory() as tmpdirname:
             assert download(
-                tmpdirname, 'https://nosuchsite0kdskjdaf.com'
+                'https://nosuchsite0kdskjdaf.com', tmpdirname
             ) == os.path.join(tmpdirname, 'nosuchsite0kdskjdaf-com.html')
             assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com.html')
             assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com_files')
@@ -69,4 +69,4 @@ def test_exception_ConnectionError():
         mock_request.side_effect = mock_side_effect
         with pytest.raises(Exception):
             with tempfile.TemporaryDirectory() as tmpdirname:
-                download(tmpdirname, 'https://test-connection-error.ttttt')
+                download('https://test-connection-error.ttttt', tmpdirname)
