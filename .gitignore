@@ -5,3 +5,4 @@ dist/
 examples/
 coverage.xml
 .coverage
+.log
