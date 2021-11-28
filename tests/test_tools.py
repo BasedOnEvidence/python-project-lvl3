@@ -5,7 +5,10 @@ import os
 from page_loader.tools import (
     get_content_folder_name,
     get_file_name_from_url,
-    create_path_if_it_is_not_exists
+    create_path_if_it_is_not_exists,
+    convert_url_to_file_name,
+    get_domain_from_url,
+    is_url_in_domain
 )
 
 
@@ -37,3 +40,33 @@ def test_get_file_name_from_url():
     assert get_file_name_from_url(
         'https://cdn2.hexlet.io/assets/favicon-342'
     ) == 'favicon-342'
+
+
+def test_get_name_from_url():
+    assert convert_url_to_file_name(
+        'https://ru.hexlet.io/courses'
+    ) == 'ru-hexlet-io-courses.html'
+    assert convert_url_to_file_name(
+        'ftp://ru.hexlet.io/courses'
+    ) == 'ru-hexlet-io-courses.html'
+    assert convert_url_to_file_name(
+        'ftp://'
+    ) == '.html'
+
+
+def test_get_domain_from_url():
+    assert get_domain_from_url('https://ru.hexlet.io/courses') == 'ru.hexlet.io'
+    assert get_domain_from_url('www.ru.hexlet.io/courses') == ''
+    assert get_domain_from_url('http://www.ru') == 'www.ru'
+
+
+def test_is_url_in_domain():
+    assert is_url_in_domain(
+        'ru.hexlet.io', 'https://ru.hexlet.io/courses'
+    ) is True
+    assert is_url_in_domain(
+        'ru.hexlet.io', 'www.ru.hexlet.io/courses'
+    ) is True
+    assert is_url_in_domain(
+        'ru.dsfsdfs.rrejek', 'http://www.ru/courses'
+    ) is False

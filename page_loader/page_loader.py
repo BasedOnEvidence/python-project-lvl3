@@ -1,11 +1,12 @@
 import requests
-import re
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
 from page_loader.tools import (
     create_path_if_it_is_not_exists,
     get_content_folder_name,
-    get_file_name_from_url
+    get_file_name_from_url,
+    get_domain_from_url,
+    is_url_in_domain,
+    convert_url_to_file_name
 )
 from page_loader.logger import get_logger
 
@@ -17,24 +18,6 @@ RESOURCES = {
     'link': 'href',
     'script': 'src'
 }
-
-
-def convert_url_to_file_name(url):
-    result = re.split(r'//', url)[1]
-    result = re.sub(r'\W', '-', result)
-    result += '.html'
-    return result
-
-
-def get_domain_from_url(url):
-    return urlparse(url).netloc
-
-
-def is_url_in_domain(domain, url):
-    url_domain = get_domain_from_url(url)
-    if url_domain == '' or url_domain == domain:
-        return True
-    return False
 
 
 def find_content(soup: BeautifulSoup) -> dict[str, list]:
