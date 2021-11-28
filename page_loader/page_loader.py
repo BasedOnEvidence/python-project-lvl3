@@ -44,7 +44,6 @@ def download_resources(txt_data, output_path, content_path, base_url):
     for tag in RESOURCES.keys():
         for url in urls[tag]:
             if is_url_in_domain(domain, url):
-                logger.info('Current content absolute url: {}'.format(url))
                 file_name = get_file_name_from_url(url)
                 content_file_path = content_path + '/' + file_name
                 current_txt = current_txt.replace(url, content_file_path)
