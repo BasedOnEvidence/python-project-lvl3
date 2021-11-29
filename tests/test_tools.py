@@ -3,7 +3,8 @@ from page_loader.tools import (
     get_file_name_from_url,
     convert_url_to_html_path,
     get_domain_from_url,
-    is_url_in_domain
+    is_url_in_domain,
+    make_url_absolute
 )
 
 
@@ -56,3 +57,9 @@ def test_is_url_in_domain():
     assert is_url_in_domain(
         'ru.dsfsdfs.rrejek', 'http://www.ru/courses'
     ) is False
+
+
+def test_make_url_absolute():
+    assert make_url_absolute(
+        'http://www.example.ru/courses', '/assets/test.rss'
+    ) == 'http://www.example.ru/assets/test.rss'
