@@ -24,5 +24,5 @@ class FakeResponse:
         return True
 
     def raise_connection_error(self):
-        if self.status_code > 400:
+        if self.status_code >= 400:
             raise requests.HTTPError

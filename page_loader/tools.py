@@ -1,21 +1,6 @@
 import os
-import errno
 from urllib.parse import urlparse
 import re
-
-
-def create_directory(path):
-    if not os.path.exists(os.path.dirname(path)):
-        try:
-            os.makedirs(os.path.dirname(path))
-        except OSError as err:
-            if err.errno != errno.EEXIST:
-                raise
-
-
-def get_content_folder_name(file_name):
-    _, ext = os.path.splitext(file_name)
-    return file_name.replace(ext, '_files')
 
 
 def get_file_name_from_url(url):
@@ -28,10 +13,17 @@ def make_url_absolute(base_url, url):
     return url
 
 
-def convert_url_to_file_name(url):
+def get_resources_path(file_path):
+    _, ext = os.path.splitext(file_path)
+    base_path, file_name = os.path.split(file_path)
+    return os.path.join(base_path, file_name.replace(ext, '_files'))
+
+
+def convert_url_to_html_path(url, output_path):
     result = re.split(r'//', url)[1]
     result = re.sub(r'\W', '-', result)
     result += '.html'
+    result = os.path.join(output_path, result)
     return result
 
 

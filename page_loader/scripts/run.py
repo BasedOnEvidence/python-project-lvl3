@@ -17,8 +17,14 @@ def main():
     except requests.exceptions.ConnectionError as err:
         logger.error('Connection error: {}'.format(err))
         sys.exit(1)
+    except FileNotFoundError as err:
+        logger.error('No such directory: {}'.format(err))
+        sys.exit(1)
+    except FileExistsError as err:
+        logger.error('File already downloaded: {}'.format(err))
+        sys.exit(1)
     except Exception as err:
-        logger.critical(err)
+        logger.error(err)
         sys.exit(1)
 
 
