@@ -62,11 +62,10 @@ def download(url, output_path):
     response = requests.get(url, allow_redirects=True)
     if response.status_code >= 400:
         raise Exception('Status code = {}'.format(response.status_code))
-    txt_data = response.text
     file_path = convert_url_to_html_path(url, output_path)
     resources_path = get_resources_path(file_path)
     os.mkdir(resources_path)
     logger.info('File path: {}'.format(file_path))
     logger.info('Resources path: {}'.format(resources_path))
-    download_resources(txt_data, file_path, resources_path, url)
+    download_resources(response.text, file_path, resources_path, url)
     return file_path

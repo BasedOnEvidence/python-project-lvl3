@@ -1,5 +1,5 @@
 import os
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 import re
 
 
@@ -8,9 +8,7 @@ def get_file_name_from_url(url):
 
 
 def make_url_absolute(base_url, url):
-    if 'http' not in url:
-        return base_url + url
-    return url
+    return urljoin(base_url, url)
 
 
 def get_resources_path(file_path):
