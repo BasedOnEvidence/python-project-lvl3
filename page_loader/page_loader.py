@@ -23,7 +23,9 @@ RESOURCES = {
 
 
 def get_url(resource, base_url):
-    url = resource[RESOURCES[resource.name]]
+    url = ''
+    if RESOURCES[resource.name] in resource.attrs:
+        url = resource[RESOURCES[resource.name]]
     return make_url_absolute(base_url, url)
 
 
@@ -36,8 +38,10 @@ def download_resources(resources, content_path, base_url):
     bar = ChargingBar('Downloading resources:', max=bar_max_length)
     for resource in resources:
         url = get_url(resource, base_url)
+        logger.info('Current resource url: {}'.format(url))
         if is_url_in_domain(domain, url):
             file_name = get_file_name_from_url(url)
+            logger.info('Current resource file name: {}'.format(file_name))
             resource_path = os.path.join(content_path, file_name)
             logger.info('Current resource path: {}'.format(resource_path))
             with open(resource_path, 'wb') as f:

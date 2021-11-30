@@ -1,6 +1,10 @@
 import os
 from urllib.parse import urljoin, urlparse
 import re
+from page_loader.logger import get_logger
+
+
+logger = get_logger(__name__)
 
 
 def get_file_name_from_url(url):
