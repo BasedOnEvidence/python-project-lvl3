@@ -37,8 +37,6 @@ def test_download():
             ) == os.path.join(tmpdirname, 'nosuchsite0kdskjdaf-com.html')
             assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com.html')
             assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com_files')
-            rss_path = tmpdirname + '/nosuchsite0kdskjdaf-com_files/lessons.rss'
-            png_path = tmpdirname + '/nosuchsite0kdskjdaf-com_files/reactjs.png'
             assert os.path.exists(
                 tmpdirname + '/nosuchsite0kdskjdaf-com_files/reactjs.png'
             )
@@ -60,6 +58,8 @@ def test_download():
             html_file = read_file(
                 tmpdirname + '/nosuchsite0kdskjdaf-com.html', 'r'
             )
+            rss_path = 'nosuchsite0kdskjdaf-com_files/lessons.rss'
+            png_path = 'nosuchsite0kdskjdaf-com_files/reactjs.png'
             assert rss_path in html_file
             assert png_path in html_file
 

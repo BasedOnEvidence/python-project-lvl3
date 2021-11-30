@@ -48,6 +48,9 @@ def download_resources(resources, content_path, base_url):
                 logger.info('Current content url: {}'.format(url))
                 response = requests.get(url)
                 f.write(response.content)
+            resource_path = os.path.join(
+                os.path.split(content_path)[-1], file_name
+            )
             resource[RESOURCES[resource.name]] = resource_path
         bar.next()
     bar.finish()
