@@ -37,29 +37,29 @@ def test_download():
             ) == os.path.join(tmpdirname, 'nosuchsite0kdskjdaf-com.html')
             assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com.html')
             assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com_files')
-            assert os.path.exists(
-                tmpdirname + '/nosuchsite0kdskjdaf-com_files/reactjs.png'
+            generated_png_path = os.path.join(
+                tmpdirname,
+                'nosuchsite0kdskjdaf-com_files',
+                'nosuchsite0kdskjdaf-com-assets-professions-reactjs.png'
             )
-            assert os.path.exists(
-                tmpdirname + '/nosuchsite0kdskjdaf-com_files/lessons.rss'
+            generated_rss_path = os.path.join(
+                tmpdirname,
+                'nosuchsite0kdskjdaf-com_files',
+                'nosuchsite0kdskjdaf-com-assets-professions-lessons.rss'
             )
+            assert os.path.exists(generated_png_path)
+            assert os.path.exists(generated_rss_path)
             img1 = read_file('tests/fixtures/reactjs.png', 'rb')
-            img2 = read_file(
-                tmpdirname + '/nosuchsite0kdskjdaf-com_files/reactjs.png',
-                'rb'
-            )
+            img2 = read_file(generated_png_path, 'rb')
             assert img1 == img2
             rss1 = read_file('tests/fixtures/lessons.rss', 'rb')
-            rss2 = read_file(
-                tmpdirname + '/nosuchsite0kdskjdaf-com_files/lessons.rss',
-                'rb'
-            )
+            rss2 = read_file(generated_rss_path, 'rb')
             assert rss1 == rss2
             html_file = read_file(
                 tmpdirname + '/nosuchsite0kdskjdaf-com.html', 'r'
             )
-            rss_path = 'nosuchsite0kdskjdaf-com_files/lessons.rss'
-            png_path = 'nosuchsite0kdskjdaf-com_files/reactjs.png'
+            rss_path = 'nosuchsite0kdskjdaf-com_files/nosuchsite0kdskjdaf-com-assets-professions-lessons.rss'
+            png_path = 'nosuchsite0kdskjdaf-com_files/nosuchsite0kdskjdaf-com-assets-professions-reactjs.png'
             assert rss_path in html_file
             assert png_path in html_file
 

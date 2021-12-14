@@ -3,11 +3,12 @@ import os
 from bs4 import BeautifulSoup
 from page_loader.tools import (
     get_resources_path,
-    get_file_name_from_url,
     get_domain_from_url,
     is_url_in_domain,
-    convert_url_to_html_path,
     make_url_absolute
+)
+from page_loader.url_tools import (
+    convert_url_to_file_name
 )
 from page_loader.logger import get_logger
 from progress.bar import ChargingBar
@@ -40,7 +41,8 @@ def download_resources(resources, content_path, base_url):
         url = get_url(resource, base_url)
         logger.info('Current resource url: {}'.format(url))
         if is_url_in_domain(domain, url):
-            file_name = get_file_name_from_url(url)
+            cutted_url, ext = os.path.splitext(url)
+            file_name = convert_url_to_file_name(cutted_url) + ext
             logger.info('Current resource file name: {}'.format(file_name))
             resource_path = os.path.join(content_path, file_name)
             logger.info('Current resource path: {}'.format(resource_path))
@@ -60,7 +62,8 @@ def download(url, output_path):
     response = requests.get(url, allow_redirects=True)
     if response.status_code >= 400:
         raise Exception('Status code = {}'.format(response.status_code))
-    file_path = convert_url_to_html_path(url, output_path)
+    file_name = convert_url_to_file_name(url) + '.html'
+    file_path = os.path.join(output_path, file_name)
     resources_path = get_resources_path(file_path)
     os.mkdir(resources_path)
     logger.info('File path: {}'.format(file_path))
