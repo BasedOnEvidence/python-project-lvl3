@@ -41,6 +41,7 @@ def download(url, output_path):
         resource_url = next(
             (item for item in raw_resource_url if item is not None), None
         )
+        bar.next()
         if not resource_url:
             continue
         resource_url_tag = RESOURCES[resource.name]
@@ -57,7 +58,6 @@ def download(url, output_path):
             resource[resource_url_tag] = os.path.join(
                 file_name + '_files', resource_file_name
             )
-        bar.next()
     bar.finish()
     save_file(file_path, soup, 'w')
     return file_path
