@@ -13,7 +13,7 @@ def main():
     parser = get_args_parser()
     args = parser.parse_args()
     try:
-        download(args.link, args.output)
+        print(download(args.link, args.output))
     except requests.exceptions.ConnectionError as err:
         logger.error('Connection error: {}'.format(err))
         sys.exit(1)
