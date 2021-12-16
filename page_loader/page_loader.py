@@ -30,11 +30,11 @@ def download(url, output_path):
     file_name = convert_url_to_file_name(url)
     file_path = os.path.join(output_path, file_name + '.html')
     resources_path = os.path.join(output_path, file_name + '_files')
-    if not os.path.exists(resources_path):
-        create_directory(resources_path)
     logger.info('File path: {}'.format(file_path))
     logger.info('Resources path: {}'.format(resources_path))
     resources = soup.find_all(RESOURCES.keys())
+    if not os.path.exists(resources_path) and resources:
+        create_directory(resources_path)
     bar = ChargingBar('Downloading resources:', max=len(resources))
     for resource in resources:
         raw_resource_url = list(map(resource.get, RESOURCES.values()))
