@@ -10,6 +10,7 @@ logger = get_logger(__name__)
 def get_page_obj(url):
     try:
         response = requests.get(url)
+        response.raise_for_status()
         return BeautifulSoup(response.text, 'html.parser')
     except requests.exceptions.RequestException as err:
         logger.error(err)
@@ -18,6 +19,7 @@ def get_page_obj(url):
 def download_resource_item(url, path):
     try:
         response = requests.get(url)
+        response.raise_for_status()
     except requests.exceptions.RequestException as err:
         logger.error(err)
     logger.debug('{} is downloaded'.format(url))
