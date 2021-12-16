@@ -20,7 +20,8 @@ def save_file(path, file, mode='wb'):
 
 def create_directory(path):
     try:
-        os.makedirs(path)
+        os.mkdir(path)
         logger.info('{} is created'.format(path))
     except OSError as err:
         logger.error(err)
+        raise OSError
