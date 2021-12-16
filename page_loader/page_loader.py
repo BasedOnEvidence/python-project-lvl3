@@ -49,6 +49,8 @@ def download(url, output_path):
             resource[resource_url_tag], url
         )
         cutted_url, ext = os.path.splitext(resource_url)
+        if ext == '':
+            ext = '.html'
         resource_file_name = convert_url_to_file_name(cutted_url) + ext
         if is_url_in_domain(resource_url, url):
             resource_file_path = os.path.join(
