@@ -22,12 +22,14 @@ def convert_url_to_standart_view(url, original_url):
         return urlunparse((
             parsed_original_url.scheme,
             parsed_original_url.netloc,
-            parsed_url.path, '', '', ''
+            parsed_url.path,
+            '', '', ''
         ))
     return urlunparse((
         parsed_original_url.scheme,
         parsed_original_url.netloc,
-        os.path.join(parsed_original_url.path, url)
+        os.path.join(parsed_original_url.path, url),
+        '', '', ''
     ))
 
 
