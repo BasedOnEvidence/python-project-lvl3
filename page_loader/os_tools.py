@@ -15,6 +15,7 @@ def save_file(path, file, mode='wb'):
             logger.info('{} is created'.format(path))
     except OSError as err:
         logger.error(err)
+        raise OSError
 
 
 def create_directory(path):
