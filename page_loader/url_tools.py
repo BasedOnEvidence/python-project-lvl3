@@ -2,13 +2,16 @@ import re
 import os
 from urllib.parse import urlparse, urlunparse
 from page_loader.logger import get_logger
+from page_loader.constants import ATTRIBUTES
 
 logger = get_logger(__name__)
 
 
 def convert_url_to_file_name(url):
     parsed_url = urlparse(url)
-    changed_url = re.sub(r'[\W_]', '-', parsed_url.netloc + parsed_url.path)
+    changed_url = re.sub(
+        r'[^A-Za-z0-9]', '-', parsed_url.netloc + parsed_url.path
+    )
     logger.debug('{} converted to {}'.format(url, changed_url))
     return changed_url
 
@@ -42,3 +45,11 @@ def is_url_in_domain(url, original_url):
     if parsed_url.netloc == parsed_original_url.netloc:
         return True
     return False
+
+
+def get_resource_url(resource):
+    raw_resource_url = list(map(resource.get, ATTRIBUTES.values()))
+    resource_url = next(
+        (item for item in raw_resource_url if item is not None), None
+    )
+    return resource_url

@@ -14,16 +14,10 @@ def main():
     args = parser.parse_args()
     try:
         print(download(args.link, args.output))
-    except requests.exceptions.ConnectionError as err:
-        logger.error('Connection error: {}'.format(err))
+    except requests.exceptions.RequestException as err:
+        logger.error(err)
         sys.exit(1)
-    except FileNotFoundError as err:
-        logger.error('No such directory: {}'.format(err))
-        sys.exit(1)
-    except FileExistsError as err:
-        logger.error('File already downloaded: {}'.format(err))
-        sys.exit(1)
-    except Exception as err:
+    except OSError as err:
         logger.error(err)
         sys.exit(1)
 
