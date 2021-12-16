@@ -1,17 +1,19 @@
-import requests
 import os
-from bs4 import BeautifulSoup
-from page_loader.tools import (
-    get_resources_path,
-    get_domain_from_url,
-    is_url_in_domain,
-    make_url_absolute
+from page_loader.network_tools import (
+    download_resource_item,
+    get_page_obj
 )
 from page_loader.url_tools import (
-    convert_url_to_file_name
+    convert_url_to_file_name,
+    convert_url_to_standart_view,
+    is_url_in_domain
 )
-from page_loader.logger import get_logger
+from page_loader.os_tools import (
+    save_file,
+    create_directory
+)
 from progress.bar import ChargingBar
+from page_loader.logger import get_logger
 
 
 logger = get_logger(__name__)
@@ -23,54 +25,39 @@ RESOURCES = {
 }
 
 
-def get_url(resource, base_url):
-    url = ''
-    if RESOURCES[resource.name] in resource.attrs:
-        url = resource[RESOURCES[resource.name]]
-    return make_url_absolute(base_url, url)
-
-
-def download_resources(resources, content_path, base_url):
-    logger.info('Current base url: {}'.format(base_url))
-    domain = get_domain_from_url(base_url)
-    logger.info('Tags: {}'.format(resources))
-    bar_max_length = len(resources)
-    logger.info('Items count: {}'.format(bar_max_length))
-    bar = ChargingBar('Downloading resources:', max=bar_max_length)
-    for resource in resources:
-        url = get_url(resource, base_url)
-        logger.info('Current resource url: {}'.format(url))
-        if is_url_in_domain(domain, url):
-            cutted_url, ext = os.path.splitext(url)
-            file_name = convert_url_to_file_name(cutted_url) + ext
-            logger.info('Current resource file name: {}'.format(file_name))
-            resource_path = os.path.join(content_path, file_name)
-            logger.info('Current resource path: {}'.format(resource_path))
-            with open(resource_path, 'wb') as f:
-                logger.info('Current content url: {}'.format(url))
-                response = requests.get(url)
-                f.write(response.content)
-            resource_path = os.path.join(
-                os.path.split(content_path)[-1], file_name
-            )
-            resource[RESOURCES[resource.name]] = resource_path
-        bar.next()
-    bar.finish()
-
-
 def download(url, output_path):
-    response = requests.get(url, allow_redirects=True)
-    if response.status_code >= 400:
-        raise Exception('Status code = {}'.format(response.status_code))
-    file_name = convert_url_to_file_name(url) + '.html'
-    file_path = os.path.join(output_path, file_name)
-    resources_path = get_resources_path(file_path)
-    os.mkdir(resources_path)
+    soup = get_page_obj(url)
+    file_name = convert_url_to_file_name(url)
+    file_path = os.path.join(output_path, file_name + '.html')
+    resources_path = os.path.join(output_path, file_name + '_files')
+    if not os.path.exists(resources_path):
+        create_directory(resources_path)
     logger.info('File path: {}'.format(file_path))
     logger.info('Resources path: {}'.format(resources_path))
-    soup = BeautifulSoup(response.text, 'html.parser')
     resources = soup.find_all(RESOURCES.keys())
-    download_resources(resources, resources_path, url)
-    with open(file_path, 'w') as f:
-        f.write(soup.prettify(formatter="html5"))
+    bar = ChargingBar('Downloading resources:', max=len(resources))
+    for resource in resources:
+        raw_resource_url = list(map(resource.get, RESOURCES.values()))
+        resource_url = next(
+            (item for item in raw_resource_url if item is not None), None
+        )
+        if not resource_url:
+            continue
+        resource_url_tag = RESOURCES[resource.name]
+        resource_url = convert_url_to_standart_view(
+            resource[resource_url_tag], url
+        )
+        cutted_url, ext = os.path.splitext(resource_url)
+        resource_file_name = convert_url_to_file_name(cutted_url) + ext
+        if is_url_in_domain(resource_url, url):
+            resource_file_path = os.path.join(
+                resources_path, resource_file_name
+            )
+            download_resource_item(resource_url, resource_file_path)
+            resource[resource_url_tag] = os.path.join(
+                file_name + '_files', resource_file_name
+            )
+        bar.next()
+    bar.finish()
+    save_file(file_path, soup, 'w')
     return file_path

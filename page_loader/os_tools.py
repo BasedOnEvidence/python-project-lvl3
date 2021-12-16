@@ -1,0 +1,24 @@
+import os
+from page_loader.logger import get_logger
+
+
+logger = get_logger(__name__)
+
+
+def save_file(path, file, mode='wb'):
+    try:
+        with open(path, mode) as f:
+            if mode == 'w':
+                f.write(file.prettify(formatter='html5'))
+            else:
+                f.write(file)
+            logger.info('{} is created'.format(path))
+    except OSError as err:
+        logger.error(err)
+
+
+def create_directory(path):
+    try:
+        os.makedirs(path)
+    except OSError as err:
+        logger.error(err)
