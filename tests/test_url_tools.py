@@ -6,14 +6,14 @@ from page_loader.url_tools import (
 
 def test_convert_url_to_file_name():
     assert convert_url_to_file_name(
-        'https://ru.hexlet.io/courses'
-    ) == 'ru-hexlet-io-courses'
+        'https://ru.hexlet.io/courses', '.html'
+    ) == 'ru-hexlet-io-courses.html'
     assert convert_url_to_file_name(
-        'ftp://ru.hexlet.io/courses'
-    ) == 'ru-hexlet-io-courses'
+        'ftp://ru.hexlet.io/courses', '.html'
+    ) == 'ru-hexlet-io-courses.html'
     assert convert_url_to_file_name(
-        'ftp://'
-    ) == ''
+        'ftp://', '.html'
+    ) == '.html'
 
 
 def test_is_url_in_domain():
