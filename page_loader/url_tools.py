@@ -1,6 +1,6 @@
 import re
 import os
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urljoin, urlparse
 from page_loader.logger import get_logger
 
 PATTERN = r'[^A-Za-z0-9]'
@@ -22,27 +22,15 @@ def convert_url_to_file_name(url, ext):
 def convert_url_to_standart_view(url, original_url):
     parsed_url = urlparse(url)
     parsed_original_url = urlparse(original_url)
+    base = parsed_original_url.scheme + '://' + parsed_original_url.netloc
     if parsed_url.scheme:
         return url
     if parsed_url.path.startswith('/'):
-        return urlunparse((
-            parsed_original_url.scheme,
-            parsed_original_url.netloc,
-            parsed_url.path,
-            '', '', ''
-        ))
-    return urlunparse((
-        parsed_original_url.scheme,
-        parsed_original_url.netloc,
-        os.path.join(parsed_original_url.path, url),
-        '', '', ''
-    ))
+        return urljoin(base, parsed_url.path)
+    return urljoin(base, os.path.join(parsed_original_url.path, url))
 
 
 def is_url_in_domain(url, original_url):
     parsed_url = urlparse(url)
     parsed_original_url = urlparse(original_url)
-    logger.debug(
-        'Checking is url {} in {}'.format(parsed_url, parsed_original_url)
-    )
     return parsed_url.netloc == parsed_original_url.netloc
