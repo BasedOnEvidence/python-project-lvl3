@@ -34,6 +34,7 @@ def download(url, output_path):
     for res_url, res_path in data_for_download.items():
         file_obj = download_resource_item(res_url)
         save_file(res_path, file_obj)
+        bar.next()
     bar.finish()
     save_bs_object(file_path, soup, 'w')
     return file_path

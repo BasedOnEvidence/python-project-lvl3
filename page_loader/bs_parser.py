@@ -28,9 +28,9 @@ def parse_html_page(page, url, resources_path):
         resource_url = convert_url_to_standart_view(
             resource[resource_url_tag], url
         )
-        cutted_url, ext = os.path.splitext(resource_url)
-        resource_file_name = convert_url_to_file_name(cutted_url, ext)
         if is_urls_have_same_base(resource_url, url):
+            cutted_url, ext = os.path.splitext(resource_url)
+            resource_file_name = convert_url_to_file_name(cutted_url, ext)
             resource_file_path = os.path.join(
                 resources_path, resource_file_name
             )
