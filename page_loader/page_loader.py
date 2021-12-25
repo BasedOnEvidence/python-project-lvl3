@@ -31,7 +31,8 @@ def download(url, output_path):
         create_directory(resources_path)
     bar = ChargingBar('Downloading resources:', max=len(data_for_download))
     for res_url, res_path in data_for_download.items():
-        download_resource_item(res_url, res_path)
+        file_obj = download_resource_item(res_url)
+        save_file(res_path, file_obj)
     bar.finish()
     save_file(file_path, soup, 'w')
     return file_path

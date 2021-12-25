@@ -3,6 +3,8 @@ import os
 from urllib.parse import urlparse, urlunparse
 from page_loader.logger import get_logger
 
+PATTERN = r'[^A-Za-z0-9]'
+
 logger = get_logger(__name__)
 
 
@@ -11,7 +13,7 @@ def convert_url_to_file_name(url, ext):
         ext = '.html'
     parsed_url = urlparse(url)
     changed_url = re.sub(
-        r'[^A-Za-z0-9]', '-', parsed_url.netloc + parsed_url.path
+        PATTERN, '-', parsed_url.netloc + parsed_url.path
     ) + ext
     logger.debug('{} converted to {}'.format(url, changed_url))
     return changed_url
@@ -43,6 +45,4 @@ def is_url_in_domain(url, original_url):
     logger.debug(
         'Checking is url {} in {}'.format(parsed_url, parsed_original_url)
     )
-    if parsed_url.netloc == parsed_original_url.netloc:
-        return True
-    return False
+    return parsed_url.netloc == parsed_original_url.netloc

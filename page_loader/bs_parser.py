@@ -1,11 +1,16 @@
 from bs4 import BeautifulSoup
 import os
-from page_loader.constants import ATTRIBUTES
 from page_loader.url_tools import (
     convert_url_to_file_name,
     convert_url_to_standart_view,
     is_url_in_domain
 )
+
+ATTRIBUTES = {
+    'img': 'src',
+    'link': 'href',
+    'script': 'src'
+}
 
 
 def parse_html_page(page, url, resources_path):

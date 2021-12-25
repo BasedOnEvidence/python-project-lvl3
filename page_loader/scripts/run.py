@@ -15,10 +15,16 @@ def main():
     try:
         print(download(args.link, args.output))
     except requests.exceptions.RequestException as err:
-        logger.error(err)
-        sys.exit(1)
-    except OSError as err:
-        logger.error(err)
+        logger.error('Network error. ' + str(err), exc_info=True)
+        sys.exit(2)
+    except PermissionError as err:
+        logger.error('Access denied. ' + str(err), exc_info=True)
+        sys.exit(3)
+    except FileNotFoundError as err:
+        logger.error('Not found. ' + str(err), exc_info=True)
+        sys.exit(4)
+    except Exception as err:
+        logger.error('Unknown error. ' + str(err), exc_info=True)
         sys.exit(1)
 
 
