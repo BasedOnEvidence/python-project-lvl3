@@ -14,7 +14,6 @@ def get_page_obj(url):
 def download_resource_item(url):
     try:
         response = requests.get(url)
-        response.raise_for_status()
     except requests.exceptions.RequestException as err:
         logger.error(str(err), exc_info=True)
     logger.debug('{} is downloaded'.format(url))
