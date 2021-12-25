@@ -3,7 +3,7 @@ import os
 from page_loader.url_tools import (
     convert_url_to_file_name,
     convert_url_to_standart_view,
-    is_url_in_domain
+    is_urls_have_same_base
 )
 
 ATTRIBUTES = {
@@ -30,7 +30,7 @@ def parse_html_page(page, url, resources_path):
         )
         cutted_url, ext = os.path.splitext(resource_url)
         resource_file_name = convert_url_to_file_name(cutted_url, ext)
-        if is_url_in_domain(resource_url, url):
+        if is_urls_have_same_base(resource_url, url):
             resource_file_path = os.path.join(
                 resources_path, resource_file_name
             )

@@ -14,7 +14,7 @@ def read_file(path, mode):
 
 
 def mock_side_effect(url, *args, **kwargs):
-    if url.endswith('test-connection-error.ttttt'):
+    if url.endswith('connection-err.com'):
         return FakeResponse(status_code=404).raise_for_status()
     if url.endswith('.png'):
         return FakeResponse(
@@ -32,19 +32,19 @@ def test_download():
         mock_request.side_effect = mock_side_effect
         with tempfile.TemporaryDirectory() as tmpdirname:
             assert download(
-                'https://nosuchsite0kdskjdaf.com', tmpdirname
-            ) == os.path.join(tmpdirname, 'nosuchsite0kdskjdaf-com.html')
-            assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com.html')
-            assert os.path.exists(tmpdirname + '/nosuchsite0kdskjdaf-com_files')
+                'https://test.com', tmpdirname
+            ) == os.path.join(tmpdirname, 'test-com.html')
+            assert os.path.exists(tmpdirname + '/test-com.html')
+            assert os.path.exists(tmpdirname + '/test-com_files')
             generated_png_path = os.path.join(
                 tmpdirname,
-                'nosuchsite0kdskjdaf-com_files',
-                'nosuchsite0kdskjdaf-com-assets-professions-reactjs.png'
+                'test-com_files',
+                'test-com-assets-professions-reactjs.png'
             )
             generated_rss_path = os.path.join(
                 tmpdirname,
-                'nosuchsite0kdskjdaf-com_files',
-                'nosuchsite0kdskjdaf-com-assets-professions-lessons.rss'
+                'test-com_files',
+                'test-com-assets-professions-lessons.rss'
             )
             assert os.path.exists(generated_png_path)
             assert os.path.exists(generated_rss_path)
@@ -56,14 +56,24 @@ def test_download():
             assert rss == expected_rss
             expected_html_file = read_file('tests/fixtures/result.html', 'r')
             html_file = read_file(
-                tmpdirname + '/nosuchsite0kdskjdaf-com.html', 'r'
+                tmpdirname + '/test-com.html', 'r'
             )
             assert html_file == expected_html_file
 
 
-def test_exception_connection_error():
+def test_exceptions():
     with unittest.mock.patch('requests.get') as mock_request:
         mock_request.side_effect = mock_side_effect
-        with pytest.raises(requests.exceptions.RequestException):
-            with tempfile.TemporaryDirectory() as tmpdirname:
-                download('https://test-connection-error.ttttt', tmpdirname)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with pytest.raises(requests.exceptions.RequestException):
+                download('https://connection-err.com', tmpdirname)
+            assert not os.path.exists(tmpdirname + '/connection-err-com.html')
+            assert not os.path.exists(tmpdirname + '/connection-err-com_files')
+            with pytest.raises(PermissionError):
+                os.chmod(tmpdirname, 0o444)
+                download('https://test.com', tmpdirname)
+            with pytest.raises(FileNotFoundError):
+                os.rmdir(os.path.basename(tmpdirname))
+                download('https://test.com', tmpdirname)
+            assert not os.path.exists(tmpdirname + '/test-com.html')
+            assert not os.path.exists(tmpdirname + '/test-com_files')

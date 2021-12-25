@@ -30,7 +30,7 @@ def convert_url_to_standart_view(url, original_url):
     return urljoin(base, os.path.join(parsed_original_url.path, url))
 
 
-def is_url_in_domain(url, original_url):
+def is_urls_have_same_base(url, original_url):
     parsed_url = urlparse(url)
     parsed_original_url = urlparse(original_url)
     return parsed_url.netloc == parsed_original_url.netloc

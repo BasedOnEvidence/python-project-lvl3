@@ -1,6 +1,6 @@
 from page_loader.url_tools import (
     convert_url_to_file_name,
-    is_url_in_domain
+    is_urls_have_same_base
 )
 
 
@@ -17,12 +17,12 @@ def test_convert_url_to_file_name():
 
 
 def test_is_url_in_domain():
-    assert is_url_in_domain(
+    assert is_urls_have_same_base(
         'https://ru.hexlet.io', 'https://ru.hexlet.io/courses'
     ) is True
-    assert is_url_in_domain(
+    assert is_urls_have_same_base(
         'https://ru.hexlet.io', 'https://www.ru.hexlet.io/courses'
     ) is False
-    assert is_url_in_domain(
+    assert is_urls_have_same_base(
         'https://ru.dsfsdfs.rrejek', 'http://www.ger.ru/courses'
     ) is False
