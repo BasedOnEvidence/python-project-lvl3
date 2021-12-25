@@ -16,7 +16,7 @@ def test_convert_url_to_file_name():
     ) == '.html'
 
 
-def test_is_url_in_domain():
+def test_is_urls_have_same_base():
     assert is_urls_have_same_base(
         'https://ru.hexlet.io', 'https://ru.hexlet.io/courses'
     ) is True
