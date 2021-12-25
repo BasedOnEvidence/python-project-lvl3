@@ -12,6 +12,7 @@ from page_loader.url_tools import (
 )
 from page_loader.os_tools import (
     save_file,
+    save_bs_object,
     create_directory
 )
 
@@ -34,5 +35,5 @@ def download(url, output_path):
         file_obj = download_resource_item(res_url)
         save_file(res_path, file_obj)
     bar.finish()
-    save_file(file_path, soup, 'w')
+    save_bs_object(file_path, soup, 'w')
     return file_path
