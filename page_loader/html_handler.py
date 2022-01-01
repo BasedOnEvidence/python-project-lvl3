@@ -1,10 +1,6 @@
 from bs4 import BeautifulSoup
 import os
-from page_loader.url_tools import (
-    convert_url_to_file_name,
-    convert_url_to_standart_view,
-    is_urls_have_same_base
-)
+from page_loader import url_tools
 
 ATTRIBUTES = {
     'img': 'src',
@@ -13,10 +9,11 @@ ATTRIBUTES = {
 }
 
 
-def parse_html(page, url, resources_path):
+def process_html(page, url):
     soup = BeautifulSoup(page.text, 'html.parser')
     resources = soup.find_all(ATTRIBUTES.keys())
-    resources_urls = {}
+    resources_dir = url_tools.to_dir_name(url, '_files')
+    resources_urls = []
     for resource in resources:
         raw_resource_url = list(map(resource.get, ATTRIBUTES.values()))
         resource_url = next(
@@ -25,17 +22,13 @@ def parse_html(page, url, resources_path):
         if not resource_url:
             continue
         resource_url_tag = ATTRIBUTES[resource.name]
-        resource_url = convert_url_to_standart_view(
+        resource_url = url_tools.join(
             resource[resource_url_tag], url
         )
-        if is_urls_have_same_base(resource_url, url):
-            cutted_url, ext = os.path.splitext(resource_url)
-            resource_file_name = convert_url_to_file_name(cutted_url, ext)
-            resource_file_path = os.path.join(
-                resources_path, resource_file_name
-            )
-            resources_urls[resource_url] = resource_file_path
+        if url_tools.get_netloc(resource_url) == url_tools.get_netloc(url):
+            resources_urls.append(resource_url)
+            resource_file_name = url_tools.to_file_name(resource_url)
             resource[resource_url_tag] = os.path.join(
-                os.path.basename(resources_path), resource_file_name
+                resources_dir, resource_file_name
             )
     return soup.prettify(), resources_urls

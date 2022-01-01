@@ -3,23 +3,33 @@ import os
 from urllib.parse import urljoin, urlparse
 from page_loader.logger import get_logger
 
-PATTERN = r'[^A-Za-z0-9]'
+REGEX = r'[^A-Za-z0-9]'
 
 logger = get_logger(__name__)
 
 
-def convert_url_to_file_name(url, ext):
+def to_file_name(url, ext=''):
     if ext == '':
-        ext = '.html'
+        url, ext = os.path.splitext(url)
+        if ext == '':
+            ext = '.html'
     parsed_url = urlparse(url)
     changed_url = re.sub(
-        PATTERN, '-', parsed_url.netloc + parsed_url.path
+        REGEX, '-', parsed_url.netloc + parsed_url.path
     ) + ext
     logger.debug('{} converted to {}'.format(url, changed_url))
     return changed_url
 
 
-def convert_url_to_standart_view(url, original_url):
+def to_dir_name(url, suffix=''):
+    parsed_url = urlparse(url)
+    changed_url = re.sub(
+        REGEX, '-', parsed_url.netloc + parsed_url.path
+    ) + suffix
+    return changed_url
+
+
+def join(url, original_url):
     parsed_url = urlparse(url)
     parsed_original_url = urlparse(original_url)
     base = parsed_original_url.scheme + '://' + parsed_original_url.netloc
@@ -30,7 +40,5 @@ def convert_url_to_standart_view(url, original_url):
     return urljoin(base, os.path.join(parsed_original_url.path, url))
 
 
-def is_urls_have_same_base(url, original_url):
-    parsed_url = urlparse(url)
-    parsed_original_url = urlparse(original_url)
-    return parsed_url.netloc == parsed_original_url.netloc
+def get_netloc(url):
+    return urlparse(url).netloc
