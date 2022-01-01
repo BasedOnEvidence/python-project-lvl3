@@ -29,7 +29,7 @@ def to_dir_name(url, suffix=''):
     return changed_url
 
 
-def join(url, original_url):
+def join(original_url, url):
     parsed_url = urlparse(url)
     parsed_original_url = urlparse(original_url)
     base = parsed_original_url.scheme + '://' + parsed_original_url.netloc

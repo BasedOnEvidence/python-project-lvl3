@@ -7,10 +7,7 @@ from page_loader.network_tools import (
     download_resource_item,
     make_request
 )
-from page_loader.os_tools import (
-    save_file,
-    create_directory
-)
+from page_loader.os_tools import save_file
 
 
 logger = get_logger(__name__)
@@ -21,11 +18,10 @@ def download(url, output_path):
     res_path = os.path.join(output_path, url_tools.to_dir_name(url, '_files'))
     response = make_request(url)
     html, resources = process_html(response, url)
-    save_file(file_path, html, mode='w')
-    logger.info(resources)
+    save_file(file_path, html)
     if not os.path.exists(res_path) and resources:
-        logger.info('Creating {}'.format(res_path))
-        create_directory(res_path)
+        os.mkdir(res_path)
+        logger.debug('{} is created'.format(res_path))
     bar = ChargingBar('Downloading resources:', max=len(resources))
     for res_url in resources:
         file_obj = download_resource_item(res_url)
