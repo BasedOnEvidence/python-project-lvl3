@@ -1,6 +1,6 @@
 import os
+import logging
 from progress.bar import ChargingBar
-from page_loader.logger import get_logger
 from page_loader.html_handler import process_html
 from page_loader import url_tools
 from page_loader.network_tools import (
@@ -10,7 +10,7 @@ from page_loader.network_tools import (
 from page_loader.os_tools import save_file
 
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def download(url, output_path):

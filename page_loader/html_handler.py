@@ -1,15 +1,12 @@
 import os
 from bs4 import BeautifulSoup
 from page_loader import url_tools
-from page_loader.logger import get_logger
 
 ATTRIBUTES = {
     'img': 'src',
     'link': 'href',
     'script': 'src'
 }
-
-logger = get_logger(__name__)
 
 
 def process_html(page, url):

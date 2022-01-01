@@ -1,11 +1,8 @@
 import re
 import os
 from urllib.parse import urljoin, urlparse
-from page_loader.logger import get_logger
 
 REGEX = r'[^A-Za-z0-9]'
-
-logger = get_logger(__name__)
 
 
 def to_file_name(url, ext=''):
@@ -17,7 +14,6 @@ def to_file_name(url, ext=''):
     changed_url = re.sub(
         REGEX, '-', parsed_url.netloc + parsed_url.path
     ) + ext
-    logger.debug('{} converted to {}'.format(url, changed_url))
     return changed_url
 
 
