@@ -18,7 +18,7 @@ def download(url, output_path):
     res_path = os.path.join(output_path, url_tools.to_dir_name(url, '_files'))
     response = make_request(url)
     html, resources = process_html(response, url)
-    save_file(file_path, html)
+    save_file(file_path, html, mode='w')
     if not os.path.exists(res_path) and resources:
         os.mkdir(res_path)
         logger.debug('{} is created'.format(res_path))

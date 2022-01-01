@@ -14,12 +14,6 @@ def main():
     try:
         print(download(args.link, args.output))
         sys.exit(0)
-    except PermissionError as err:
-        logger.error('Access denied. ' + str(err), exc_info=True)
-        sys.exit(3)
-    except FileNotFoundError as err:
-        logger.error('Not found. ' + str(err), exc_info=True)
-        sys.exit(4)
     except Exception as err:
         logger.error(str(err), exc_info=True)
         sys.exit(1)
