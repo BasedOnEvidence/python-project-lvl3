@@ -15,13 +15,10 @@ def process_html(page, url):
     resources_dir = url_tools.to_dir_name(url, '_files')
     resources_urls = []
     for resource in resources:
-        raw_resource_url = list(map(resource.get, ATTRIBUTES.values()))
-        resource_url = next(
-            (item for item in raw_resource_url if item is not None), None
-        )
+        resource_url_tag = ATTRIBUTES[resource.name]
+        resource_url = resource.get(resource_url_tag)
         if not resource_url:
             continue
-        resource_url_tag = ATTRIBUTES[resource.name]
         resource_url = url_tools.join(
             resource[resource_url_tag], url
         )
