@@ -1,5 +1,4 @@
 import sys
-import requests
 
 from page_loader.cli import get_args_parser
 from page_loader.page_loader import download
@@ -14,9 +13,7 @@ def main():
     args = parser.parse_args()
     try:
         print(download(args.link, args.output))
-    except requests.exceptions.RequestException as err:
-        logger.error('Network error. ' + str(err), exc_info=True)
-        sys.exit(2)
+        sys.exit(0)
     except PermissionError as err:
         logger.error('Access denied. ' + str(err), exc_info=True)
         sys.exit(3)
@@ -24,7 +21,7 @@ def main():
         logger.error('Not found. ' + str(err), exc_info=True)
         sys.exit(4)
     except Exception as err:
-        logger.error('Unknown error. ' + str(err), exc_info=True)
+        logger.error(str(err), exc_info=True)
         sys.exit(1)
 
 

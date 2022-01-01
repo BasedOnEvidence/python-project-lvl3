@@ -6,9 +6,13 @@ logger = get_logger(__name__)
 
 
 def make_request(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    return response
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response
+    except requests.exceptions.RequestException as err:
+        logger.error('Network error!')
+        raise requests.exceptions.RequestException(err)
 
 
 def download_resource_item(url):
