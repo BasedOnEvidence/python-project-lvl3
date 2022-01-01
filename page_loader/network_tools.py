@@ -5,7 +5,7 @@ from page_loader.logger import get_logger
 logger = get_logger(__name__)
 
 
-def get_page_obj(url):
+def make_request(url):
     response = requests.get(url)
     response.raise_for_status()
     return response
@@ -13,8 +13,7 @@ def get_page_obj(url):
 
 def download_resource_item(url):
     try:
-        response = requests.get(url)
+        response = make_request(url)
     except requests.HTTPError as err:
-        logger.error(str(err), exc_info=True)
-    logger.debug('{} is downloaded'.format(url))
+        logger.warning(str(err))
     return response.content

@@ -13,10 +13,10 @@ ATTRIBUTES = {
 }
 
 
-def parse_html_page(page, url, resources_path):
+def parse_html(page, url, resources_path):
     soup = BeautifulSoup(page.text, 'html.parser')
     resources = soup.find_all(ATTRIBUTES.keys())
-    data_for_download = {}
+    resources_urls = {}
     for resource in resources:
         raw_resource_url = list(map(resource.get, ATTRIBUTES.values()))
         resource_url = next(
@@ -34,8 +34,8 @@ def parse_html_page(page, url, resources_path):
             resource_file_path = os.path.join(
                 resources_path, resource_file_name
             )
-            data_for_download[resource_url] = resource_file_path
+            resources_urls[resource_url] = resource_file_path
             resource[resource_url_tag] = os.path.join(
                 os.path.basename(resources_path), resource_file_name
             )
-    return soup, data_for_download
+    return soup.prettify(), resources_urls
