@@ -13,9 +13,6 @@ from page_loader.os_tools import (
 )
 
 
-logger = logging.getLogger(__name__)
-
-
 def download(url, output_path):
     file_path = os.path.join(output_path, url_tools.to_file_name(url, '.html'))
     res_path = os.path.join(output_path, url_tools.to_dir_name(url, '_files'))
@@ -23,9 +20,9 @@ def download(url, output_path):
     html, resources = process_html(response, url)
     test_access(output_path)
     save_file(file_path, html, mode='w')
-    if resources:
+    if not os.path.exists(res_path) and resources:
         os.mkdir(res_path)
-        logger.debug('{} is created'.format(res_path))
+        logging.debug('{} is created'.format(res_path))
     bar = ChargingBar('Downloading resources:', max=len(resources))
     for res_url in resources:
         file_obj = download_resource_item(res_url)

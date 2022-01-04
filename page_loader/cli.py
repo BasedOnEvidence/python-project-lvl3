@@ -9,10 +9,13 @@ def get_args_parser():
         default='/var/tmp',
         help='set format of output'
     )
+    log_level_choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     parser.add_argument(
         '-l',
         '--log_level',
         default='WARNING',
+        type=str.upper,
+        choices=log_level_choices,
         help='set log level',
     )
     parser.add_argument('link')
