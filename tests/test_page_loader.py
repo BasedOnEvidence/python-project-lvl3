@@ -30,7 +30,7 @@ def mock_side_effect(url, *args, **kwargs):
     return FakeResponse(text=read_file('tests/fixtures/test.html', 'r'))
 
 
-def assert_files(path1, path2):
+def assert_content(path1, path2):
     content1 = read_file(path1)
     content2 = read_file(path2)
     assert content1 == content2
@@ -57,15 +57,15 @@ def test_download():
             )
             assert os.path.exists(png_path)
             assert os.path.exists(rss_path)
-            assert_files(
+            assert_content(
                 png_path,
                 'tests/fixtures/reactjs.png'
             )
-            assert_files(
+            assert_content(
                 rss_path,
                 'tests/fixtures/lessons.rss'
             )
-            assert_files(
+            assert_content(
                 os.path.join(tmpdir, 'test-com.html'),
                 'tests/fixtures/result.html'
             )

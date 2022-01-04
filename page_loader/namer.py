@@ -2,7 +2,7 @@ import re
 import os
 from urllib.parse import urlparse
 
-REGEX = r'[^A-Za-z0-9]'
+FORMAT_URL_PATTERN = r'[^A-Za-z0-9]'
 
 
 def to_file_name(url, force_ext=''):
@@ -14,7 +14,7 @@ def to_file_name(url, force_ext=''):
             force_ext = '.' + force_ext
     parsed_url = urlparse(url)
     changed_url = re.sub(
-        REGEX, '-', parsed_url.netloc + parsed_url.path
+        FORMAT_URL_PATTERN, '-', parsed_url.netloc + parsed_url.path
     ) + force_ext
     return changed_url
 
