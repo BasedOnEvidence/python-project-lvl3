@@ -1,7 +1,7 @@
 import os
 from bs4 import BeautifulSoup
-from page_loader import namer
 from urllib.parse import urljoin, urlparse
+from page_loader import namer
 
 ATTRIBUTES = {
     'img': 'src',

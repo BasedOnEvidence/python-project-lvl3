@@ -1,7 +1,7 @@
 import re
 import os
-from urllib.parse import urlparse
 import logging
+from urllib.parse import urlparse
 
 FORMAT_URL_PATTERN = r'[^A-Za-z0-9]'
 

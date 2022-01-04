@@ -2,8 +2,8 @@ import os
 import logging
 import requests
 from progress.bar import ChargingBar
-from page_loader.parser import process_html
 from page_loader import namer
+from page_loader.parser import process_html
 from page_loader.requester import (
     make_request
 )

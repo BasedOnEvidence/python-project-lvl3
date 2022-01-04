@@ -1,10 +1,9 @@
-import unittest.mock
 import tempfile
 import os
 import pytest
 import requests
+import unittest.mock
 from tests.fake_response import FakeResponse
-
 from page_loader.page_loader import download
 
 

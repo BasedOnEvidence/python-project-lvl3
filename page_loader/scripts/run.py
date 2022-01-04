@@ -1,6 +1,5 @@
 import sys
 import logging
-
 from page_loader.cli import get_args_parser
 from page_loader.page_loader import download
 from page_loader.logger import setup
