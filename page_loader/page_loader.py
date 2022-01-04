@@ -9,7 +9,7 @@ from page_loader.requester import (
 )
 from page_loader.saver import (
     save_content,
-    test_access
+    is_writable
 )
 
 
@@ -22,15 +22,11 @@ def download_resource_item(url):
 
 
 def download(url, output_path):
-    file_path = os.path.join(
-        output_path, namer.to_file_name(url, '.html')
-    )
-    res_path = os.path.join(
-        output_path, namer.to_dir_name(url, '_files')
-    )
+    file_path = os.path.join(output_path, namer.to_file_name(url, '.html'))
+    res_path = os.path.join(output_path, namer.to_dir_name(url, '_files'))
     response = make_request(url)
     html, resources = process_html(response, url)
-    test_access(output_path)
+    is_writable(output_path)
     save_content(file_path, html)
     if not os.path.exists(res_path) and resources:
         os.mkdir(res_path)

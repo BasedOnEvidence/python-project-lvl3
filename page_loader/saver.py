@@ -9,7 +9,7 @@ def save_content(path, file):
         f.write(file)
 
 
-def test_access(path):
+def is_writable(path):
     if not os.access(path, os.W_OK):
         raise PermissionError('Access denied to {}'.format(path))
     if not os.path.exists(path) or os.path.isfile(path):
