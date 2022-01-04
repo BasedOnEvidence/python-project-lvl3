@@ -1,25 +1,25 @@
 import re
 import os
-import logging
 from urllib.parse import urlparse
 
 FORMAT_URL_PATTERN = r'[^A-Za-z0-9]'
 
 
+def to_result_name(netloc, path, ext):
+    return re.sub(FORMAT_URL_PATTERN, '-', netloc + path) + ext
+
+
 def to_file_name(url, force_ext=''):
+    url_path = urlparse(url).path
+    url_netlock = urlparse(url).netloc
     if force_ext == '':
-        url, force_ext = os.path.splitext(url)
+        url_path, force_ext = os.path.splitext(url_path)
         if force_ext == '':
             force_ext = '.html'
-    if not force_ext.startswith('.') and force_ext != '_files':
+    elif not force_ext.startswith('.'):
         force_ext = '.' + force_ext
-    parsed_url = urlparse(url)
-    changed_url = re.sub(
-        FORMAT_URL_PATTERN, '-', parsed_url.netloc + parsed_url.path
-    ) + force_ext
-    logging.debug(changed_url)
-    return changed_url
+    return to_result_name(url_netlock, url_path, force_ext)
 
 
 def to_dir_name(url, suffix='_files'):
-    return to_file_name(url, suffix)
+    return to_result_name(urlparse(url).netloc, urlparse(url).path, suffix)
