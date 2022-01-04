@@ -12,6 +12,6 @@ def save_content(path, file):
 def test_access(path):
     if not os.access(path, os.W_OK):
         raise PermissionError('Access denied to {}'.format(path))
-    if not os.path.exists(path):
-        raise FileNotFoundError('No such file or directory: {}'.format(path))
+    if not os.path.exists(path) or os.path.isfile(path):
+        raise FileNotFoundError('No such directory: {}'.format(path))
     return True
