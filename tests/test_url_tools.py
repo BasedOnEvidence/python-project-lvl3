@@ -6,11 +6,14 @@ def test_convert_url_to_file_name():
         'https://ru.hexlet.io/courses', '.html'
     ) == 'ru-hexlet-io-courses.html'
     assert namer.to_file_name(
-        'ftp://ru.hexlet.io/courses', '.html'
+        'ftp://ru.hexlet.io/courses'
     ) == 'ru-hexlet-io-courses.html'
     assert namer.to_file_name(
         'ftp://', '.html'
     ) == '.html'
+    assert namer.to_file_name(
+        'ru.hexlet.io/courses', 'html'
+    ) == 'ru-hexlet-io-courses.html'
 
 
 def test_convert_url_to_dir_name():
