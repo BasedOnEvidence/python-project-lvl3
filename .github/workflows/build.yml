@@ -1,4 +1,4 @@
-name: PythonCI
+name: Build
 
 on:
   push:
@@ -7,10 +7,10 @@ on:
     branches: [ main ]
 
 jobs:
-  coverage: 
+  coverage:
     runs-on: ubuntu-latest
-    
-    steps:      
+
+    steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.6.8
         uses: actions/setup-python@v2
@@ -19,7 +19,7 @@ jobs:
       - name: install poetry
         run: pip install poetry
       - name: install dependency
-        run: make install  
+        run: make install
       - name: lint
         run: make lint
       - name: code coverage
