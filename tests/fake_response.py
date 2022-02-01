@@ -2,7 +2,7 @@ import requests
 
 
 class FakeResponse:
-    def __init__(self, content=b'', text='', status_code=200):
+    def __init__(self, content=None, text=None, status_code=200):
         self._content = content
         self._text = text
         self._status_code = status_code

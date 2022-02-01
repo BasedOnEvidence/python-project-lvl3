@@ -1,7 +1,7 @@
 import os
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
-from page_loader import namer
+from page_loader import url_formatter
 
 ATTRIBUTES = {
     'img': 'src',
@@ -13,7 +13,7 @@ ATTRIBUTES = {
 def process_html(page, url):
     soup = BeautifulSoup(page.text, 'html.parser')
     resources = soup.find_all(ATTRIBUTES.keys())
-    resources_dir = namer.to_dir_name(url, '_files')
+    resources_dir = url_formatter.to_dir_name(url, '_files')
     resources_urls = []
     for resource in resources:
         resource_url_tag = ATTRIBUTES[resource.name]
@@ -24,7 +24,7 @@ def process_html(page, url):
         url_netloc = urlparse(url).netloc
         if urlparse(resource_url).netloc == url_netloc:
             resources_urls.append(resource_url)
-            resource_file_name = namer.to_file_name(resource_url)
+            resource_file_name = url_formatter.to_file_name(resource_url)
             resource[resource_url_tag] = os.path.join(
                 resources_dir, resource_file_name
             )

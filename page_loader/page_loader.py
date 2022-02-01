@@ -2,41 +2,45 @@ import os
 import logging
 import requests
 from progress.bar import ChargingBar
-from page_loader import namer
-from page_loader.parser import process_html
-from page_loader.requester import (
-    make_request
-)
-from page_loader.saver import (
-    save_content,
-    is_writable
+from page_loader import url_formatter
+from page_loader.resources import process_html
+from page_loader.storage import (
+    save_file,
+    is_directory_available
 )
 
 
-def download_resource_item(url):
+def make_request(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    return response
+
+
+def download_resource_item(url, path):
     try:
         response = make_request(url)
+        res_file_name = url_formatter.to_file_name(url)
+        res_file_path = os.path.join(path, res_file_name)
+        save_file(res_file_path, response.content)
     except requests.HTTPError as err:
         logging.warning(str(err))
     return response.content
 
 
 def download(url, output_path):
-    file_path = os.path.join(output_path, namer.to_file_name(url))
-    res_path = os.path.join(output_path, namer.to_dir_name(url))
+    logging.info('Program started')
+    is_directory_available(output_path)
+    file_path = os.path.join(output_path, url_formatter.to_file_name(url))
+    res_path = os.path.join(output_path, url_formatter.to_dir_name(url))
     response = make_request(url)
     html, resources = process_html(response, url)
-    is_writable(output_path)
-    save_content(file_path, html)
+    save_file(file_path, html)
     if not os.path.exists(res_path) and resources:
         os.mkdir(res_path)
-        logging.debug('{} is created'.format(res_path))
     bar = ChargingBar('Downloading resources:', max=len(resources))
     for res_url in resources:
-        file_obj = download_resource_item(res_url)
-        res_file_name = namer.to_file_name(res_url)
-        res_file_path = os.path.join(res_path, res_file_name)
-        save_content(res_file_path, file_obj)
+        download_resource_item(res_url, res_path)
         bar.next()
     bar.finish()
+    logging.info('The program completed successfully')
     return file_path

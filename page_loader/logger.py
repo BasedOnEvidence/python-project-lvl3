@@ -1,12 +1,12 @@
 import logging
 
 
-log_format = '[(%(levelname)s)-%(asctime)s-%(name)s]: %(message)s'
+LOG_FORMAT = '[(%(levelname)s)-%(asctime)s-%(name)s]: %(message)s'
 
 
 def setup(level):
     logging.basicConfig(
-        format=log_format,
+        format=LOG_FORMAT,
         level=level,
         encoding='utf-8'
     )
