@@ -1,13 +1,11 @@
-import os
 import logging
+import os
+
 import requests
-from progress.bar import ChargingBar
 from page_loader import url_formatter
 from page_loader.resources import process_html
-from page_loader.storage import (
-    save_file,
-    is_directory_available
-)
+from page_loader.storage import is_directory_available, save_file
+from progress.bar import ChargingBar
 
 
 def make_request(url):
@@ -30,11 +28,10 @@ def download_resource_item(url, path):
 def download(url, output_path):
     logging.info('Program started')
     is_directory_available(output_path)
-    file_path = os.path.join(output_path, url_formatter.to_file_name(url))
+    html_path = os.path.join(output_path, url_formatter.to_file_name(url))
     res_path = os.path.join(output_path, url_formatter.to_dir_name(url))
-    response = make_request(url)
-    html, resources = process_html(response, url)
-    save_file(file_path, html)
+    html, resources = process_html(make_request(url).text, url)
+    save_file(html_path, html)
     if not os.path.exists(res_path) and resources:
         os.mkdir(res_path)
     bar = ChargingBar('Downloading resources:', max=len(resources))
@@ -43,4 +40,4 @@ def download(url, output_path):
         bar.next()
     bar.finish()
     logging.info('The program completed successfully')
-    return file_path
+    return html_path

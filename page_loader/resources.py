@@ -1,22 +1,23 @@
 import os
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
+
+from bs4 import BeautifulSoup
 from page_loader import url_formatter
 
-ATTRIBUTES = {
+TAG_ATTRIBUTES = {
     'img': 'src',
     'link': 'href',
     'script': 'src'
 }
 
 
-def process_html(page, url):
-    soup = BeautifulSoup(page.text, 'html.parser')
-    resources = soup.find_all(ATTRIBUTES.keys())
+def process_html(html, url):
+    soup = BeautifulSoup(html, 'html.parser')
+    resources = soup.find_all(TAG_ATTRIBUTES.keys())
     resources_dir = url_formatter.to_dir_name(url, '_files')
     resources_urls = []
     for resource in resources:
-        resource_url_tag = ATTRIBUTES[resource.name]
+        resource_url_tag = TAG_ATTRIBUTES[resource.name]
         resource_url = resource.get(resource_url_tag)
         if not resource_url:
             continue
