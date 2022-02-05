@@ -2,10 +2,11 @@ import logging
 import os
 
 import requests
+from progress.bar import ChargingBar
+
 from page_loader import url_formatter
 from page_loader.resources import process_html
 from page_loader.storage import is_directory_available, save_file
-from progress.bar import ChargingBar
 
 
 def make_request(url):

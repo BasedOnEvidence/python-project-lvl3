@@ -2,6 +2,7 @@ import os
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
+
 from page_loader import url_formatter
 
 TAG_ATTRIBUTES = {

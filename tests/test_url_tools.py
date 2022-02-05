@@ -1,4 +1,5 @@
 import pytest
+
 from page_loader import url_formatter
 
 

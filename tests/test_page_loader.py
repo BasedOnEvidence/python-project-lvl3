@@ -4,6 +4,7 @@ import unittest.mock
 
 import pytest
 import requests
+
 from page_loader.page_loader import download
 from tests.fake_response import FakeResponse
 
