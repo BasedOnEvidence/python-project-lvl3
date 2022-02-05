@@ -5,10 +5,6 @@ from urllib.parse import urlparse
 FORMAT_URL_PATTERN = r'[^A-Za-z0-9]'
 
 
-def to_result_name(netloc, path, ext):
-    return re.sub(FORMAT_URL_PATTERN, '-', netloc + path) + ext
-
-
 def to_file_name(url, force_ext=None):
     url_path = urlparse(url).path
     url_path, ext = os.path.splitext(url_path)
